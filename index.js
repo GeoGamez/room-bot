@@ -4,19 +4,42 @@ require("dotenv").config()
 const { Client, GatewayIntentBits } = require('discord.js');
 
 
-const client = new Discord.Client({ intents:
-     [GatewayIntentBits.Guilds, 
+const client = new Discord.Client({
+     intents: [
+        GatewayIntentBits.Guilds, 
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent] })
+        GatewayIntentBits.MessageContent
+    ]
+     })
 
-client.on("ready", () => {
-    console.log(`Logged in as ${client.user.tag}`)
-})
 
-client.on("messageCreate", (message) => {
-    if (message.content == "hi"){
-        message.reply("Hello World!")
-    }
-})
+  
+let bot = {
+    client, 
+    prefix: ".w ", 
+    owners: ["360132402598903818"]
+}
 
-client.login(process.env.TOKEN)
+client.commands = new Discord.Collection()
+client.events = new Discord.Collection()
+
+
+client.loadEvents = (bot, reload) => require("./handlers/events")(bot, reload)
+client.loadCommands = (bot, reload) => require("./handlers/commands")(bot, reload)
+
+
+client.loadEvents(bot, false)
+client.loadCommands(bot, false)
+
+module.exports = bot
+// client.on("ready", () => {
+//     console.log(`Logged in as ${client.user.tag}`)
+// })
+
+// client.on("messageCreate", (message) => {
+//     if (message.content == "hi"){
+//         message.reply("Hello World!")
+//     }
+// })
+
+ client.login(process.env.TOKEN)
