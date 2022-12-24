@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const mongoose = require("mongoose");
 require("dotenv").config()
 
 const { Client, GatewayIntentBits } = require('discord.js');
@@ -8,7 +9,8 @@ const client = new Discord.Client({
      intents: [
         GatewayIntentBits.Guilds, 
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers
     ]
      })
 
@@ -41,5 +43,12 @@ module.exports = bot
 //         message.reply("Hello World!")
 //     }
 // })
+mongoose.set('strictQuery', true);
+mongoose.connect(process.env.MONGODB_SRV).then(() =>{
+    console.log("Connected to DB")
+}).catch((err) =>{
+    console.log(err)
+})
+
 
  client.login(process.env.TOKEN)

@@ -1,5 +1,5 @@
 const Discord = require("discord.js")
-
+const profileModel = require("../models/profileSchema")
 module.exports = {
     name: "messageCreate",
     run: async function runAll(bot, message){
@@ -7,6 +7,24 @@ module.exports = {
 
         if (!message.guild) return
         if (message.author.bot) return
+
+        let profileData;
+        try {
+            profileData = await profileModel.findOne({
+                userid: message.author.id
+            });
+            if (!profileData){
+                let profile = await profileModel.create({
+                    userid: message.author.id,
+                    serverID: message.guild.id,
+                    susoin: 1000,
+                    bank: 0
+                });
+                profile.save();
+            }
+        } catch (err) {
+            console.log(err)
+        }
 
         if (!message.content.startsWith(prefix))
          return
@@ -35,7 +53,7 @@ module.exports = {
         }
 
         try {
-            await command.run({...bot,message, args})
+            await command.run({...bot,message, args, profileData})
         }
         catch (err) {
             let errMsg = err.toString()
