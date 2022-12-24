@@ -1,5 +1,7 @@
 module.exports = {
     name: "balance",
+    aliases: ['bal', 'bc', 'balcheck'],
+    cooldown: 1,
     category: "economy",
     permissions: [],
     devOnly: false,

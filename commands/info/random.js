@@ -1,5 +1,7 @@
 module.exports = {
     name: "random",
+    aliases: ["rand"],
+    cooldown: 1,
     category: "info",
     permissions: [],
     devOnly: false,

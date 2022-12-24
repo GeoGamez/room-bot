@@ -5,6 +5,8 @@ const profileSchema = require("../../models/profileSchema");
 
 module.exports = {
     name: "createprof",
+    aliases: ['cp', 'cprof', 'createp'],
+    cooldown: 500,
     category: "economy",
     permissions: [],
     devOnly: false,

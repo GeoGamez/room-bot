@@ -1,5 +1,9 @@
 const Discord = require("discord.js")
 const profileModel = require("../models/profileSchema")
+
+const cooldowns = new Map();
+
+
 module.exports = {
     name: "messageCreate",
     run: async function runAll(bot, message){
@@ -32,8 +36,32 @@ module.exports = {
         const args = message.content.slice(prefix.length).trim().split(/ +/g)
         const cmdstr = args.shift().toLowerCase()
 
-        let command = client.commands.get(cmdstr)
-        if(!command) return
+        //Command/Aliase Check: 
+
+        let command = client.commands.get(cmdstr) || client.commands.find(a => a.aliases && a.aliases.includes(cmdstr));
+        if(!command) return;
+
+
+        // Cooldown code:
+
+        if(!cooldowns.has(command.name)){
+            cooldowns.set(command.name, new Discord.Collection()) 
+        }
+        const current_time = Date.now();
+        const time_stamps = cooldowns.get(command.name);
+        const cooldown_amount = (command.cooldown) * 1000;
+
+        if(time_stamps.has(message.author.id)){
+            const exp_time = time_stamps.get(message.author.id) + cooldown_amount
+            if(current_time < exp_time){
+                const time_left = (exp_time - current_time) /1000
+
+                return message.reply(`${command.name} needs ${time_left.toFixed(1)} seconds to rejuvenate`)
+            }
+        }
+
+        time_stamps.set(message.author.id, current_time)
+        setTimeout(() => time_stamps.delete(message.author.id), cooldown_amount)
 
 
         let member = message.member
@@ -41,6 +69,9 @@ module.exports = {
         if(command.devOnly &&  !owners.includes(member.id)){
             return message.reply("Admin only. sus....")
         }
+
+
+        //Perms Check:
 
         if(command.permissions && member.permissions.missing(command.permissions).length !== 0){
             var missing = member.permissions.missing(command.permissions)
