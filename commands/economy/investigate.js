@@ -24,11 +24,12 @@ module.exports = {
 
         const chosenLocations = location.sort(() => Math.random() - Math.random()).slice(0, 3);
 
-        const filter = ({ author, content }) => message.author.id === message.author.id && chosenLocations.some((location) => location.toLowerCase() == content.toLowerCase());
+        const filter = ({ author, content }) => message.author.id === author.id && chosenLocations.some((location) => location.toLowerCase() == content.toLowerCase());
 
         const collector = message.channel.createMessageCollector( {filter, max: 1, time: 25000 });
 
         const earnings = Math.floor(Math.random() * (1000 - 100 + 1)) + 100;
+
 
         
 
@@ -50,11 +51,11 @@ module.exports = {
 
         collector.on('end', (collected, reason) => {
             if (reason == "time") {
-                message.channel.send('You ran out of time!');
+                message.reply('Too slow!');
             }
         });
 
 
-        message.channel.send(`<@${message.author.id}> Which location would you like to search?\n Type the location in this channel\n \`${chosenLocations.join('` `')}\``);
+        message.channel.send(`<@${message.author.id}> Where would you like to investigate? \n \`${chosenLocations.join('` `')}\``);
     }
 }

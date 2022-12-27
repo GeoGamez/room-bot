@@ -18,7 +18,7 @@ const client = new Discord.Client({
   
 let bot = {
     client, 
-    prefix: ".w ", 
+    prefix: ".s", 
     owners: ["360132402598903818"]
 }
 
