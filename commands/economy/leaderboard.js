@@ -13,18 +13,18 @@ module.exports = {
             let data = await profileModel.find({})
             let members = []
             for(let obj of data) {
-               if (message.guild.members.cache.map((member) => member.id).includes(obj.userid)){
-                members.push(obj)
-               }
+               if (message.guild.members.cache.map((member) => member.id).includes(obj.userid)){ members.push(obj)
+                }
+               
                }
                const embed = new EmbedBuilder().setTitle("Leaderboard").setColor("#00ff00").setFooter({text: "You are not on the board!"})
 
                members = members.sort(function (b,a){
-                return a.susoin - b.susoin
+                return (a.susoin + a.bank) - (b.susoin + b.bank)
                })
 
                members = members.filter(function possibleCheck(value){
-                return value.susoin > 0
+                return (value.susoin > 0 || value.bank > 0)
                })
 
                let pos = 0
@@ -42,7 +42,8 @@ module.exports = {
                 let user = message.guild.members.cache.get(members[i].userid)
                 if(!user) return
                 let bal = members[i].susoin
-                desc += `${i + 1}. <@${user.id}> - ${bal}\n`
+                let bankbal = members[i].bank
+                desc += `${i + 1}. <@${user.id}> - ${bal + bankbal}\n`
             }
 
             embed.setDescription(desc)
