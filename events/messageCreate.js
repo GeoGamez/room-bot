@@ -22,7 +22,8 @@ module.exports = {
                     userid: message.author.id,
                     serverID: message.guild.id,
                     susoin: 1000,
-                    bank: 0
+                    bank: 0,
+                    inventory: []
                 });
                 profile.save();
             }

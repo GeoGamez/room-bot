@@ -5,7 +5,8 @@ const profileSchema = new Schema({
     userid: {type: String, required: true, unique: true},
     serverID: {type: String, required: true, unique: false},
     susoin: {type: Number, default: 1000, unique: false},
-    bank: {type: Number}
+    bank: {type: Number},
+    inventory: {type: Object}
 })
 const name = "profile";
 
